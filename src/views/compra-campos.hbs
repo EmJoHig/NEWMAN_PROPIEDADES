@@ -2,13 +2,10 @@
 <html lang="es">
 
 <head>
-    <!--====== Required meta tags ======-->
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-    <!--====== Title ======-->
     <title>Newman Group</title>
 
     <!--====== Favicon Icon ======-->
@@ -52,7 +49,6 @@
             </div>
         </div>
     </div>
-
     <!--====== PRELOADER ENDS START ======-->
 
     <header id="home" class="header-area">
@@ -63,7 +59,7 @@
                         <nav class="navbar navbar-expand-lg">
                             <a class="navbar-brand" href="/">
                                 <img src="images/newman.png" alt="Logo">
-                            </a> <!-- Logo -->
+                            </a> 
                             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                                 <span class="toggler-icon"></span>
                                 <span class="toggler-icon"></span>
@@ -73,17 +69,17 @@
                             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                                 <ul class="navbar-nav ml-auto">
                                     <li class="nav-item"><a class="page-scroll" href="/">INICIO</a></li>
-                                    {{!-- <li class="nav-item"><a class="page-scroll" href="/alquiler">ALQUILER</a></li> --}}
+                                    <li class="nav-item"><a class="page-scroll" href="/alquiler">ALQUILER</a></li>
                                     <li class="nav-item"><a class="page-scroll" href="/compra">COMPRA</a></li>
                                     <li class="nav-item active"><a class="page-scroll" href="/compra-campos">CAMPOS</a></li>
                                     <li class="nav-item"><a class="page-scroll" href="/contacto">CONTACTO</a></li>
                                 </ul>
-                            </div> <!-- navbar collapse -->
-                        </nav> <!-- navbar -->
+                            </div> 
+                        </nav> 
                     </div>
-                </div> <!-- row -->
-            </div> <!-- container -->
-        </div> <!-- navigation -->
+                </div> 
+            </div> 
+        </div> 
     </header>
 
     <!--====== CONTACT PART START ======-->
@@ -94,11 +90,10 @@
                 <div class="col-lg-8">
                     <div class="section-title text-center pb-25">
                         <h2 class="title">Campos en Venta</h2>
-                    </div> <!-- section title -->
+                    </div> 
                 </div>
             </div> 
 
-            <!-- row -->
             <div class="row">
                 <div class="col-lg-12">
                     <div class="row">
@@ -107,7 +102,11 @@
                                 <div class="single-blog text-center mt-30">
                                     <a href="/detalle-campo/{{_id}}">
                                         <div class="blog-image">
-                                            <img src="data:image/jpg;base64,{{imagen}}" alt="">
+                                            {{#each imagen}}
+                                                {{#if @first}}
+                                                    <img src="data:image/jpg;base64,{{this}}" alt="Blog">
+                                                {{/if}}
+                                            {{/each}}
                                         </div>
                                         <div class="blog-content">
                                             <h6 class="contact-title">{{ nombre }}</h6>
@@ -119,8 +118,8 @@
                         {{/each}}
                     </div>
                 </div>
-            </div> <!-- row -->
-        </div> <!-- container -->
+            </div> 
+        </div> 
     </section>
 
     <!--====== CONTACT PART ENDS ======-->
@@ -133,30 +132,27 @@
                 <div class="row justify-content-center">
                     <div class="col-lg-8">
                         <div class="footer-content text-center">
-                            {{!-- <a href="index.html">
-                                <img src="images/logo-2.png" alt="Logo">
-                            </a> --}}
                             <p style="font-size: 25px;">Trabajamos para que tus sueños se hagan realidad.</p>
                             <ul>
                                 <li><a href="https://www.facebook.com/Newman-Group-104458271309007"><i class="lni-facebook-filled"></i></a></li>
                                 <li><a href="https://www.instagram.com/new_man_group/"><i class="lni-instagram-original"></i></a></li>
                             </ul>
-                        </div> <!-- footer content -->
+                        </div>
                     </div>
-                </div> <!-- row -->
-            </div> <!-- container -->
-        </div> <!-- footer widget -->
+                </div>
+            </div> 
+        </div>
         <div class="footer-copyright pb-20">
             <div class="container">
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="copyright-text text-center pt-20">
                             <p>Copyright © 2021. Page Crafted by <a rel="nofollow">Emanuel Higuera</a></p>
-                        </div> <!-- copyright text -->
+                        </div>
                     </div>
-                </div> <!-- row -->
-            </div> <!-- container -->
-        </div> <!-- footer widget -->
+                </div> 
+            </div> 
+        </div>
     </footer>
 
     <!--====== FOOTER PART ENDS ======-->

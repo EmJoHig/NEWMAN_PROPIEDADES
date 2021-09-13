@@ -9,6 +9,7 @@ router.get('/', async (req, res) => {
 
     const propiedades =  await Propiedad.find().limit(3).lean();
     const campos =  await Campo.find().limit(3).lean();
+
     res.render('index', { propiedades, campos });
 });
 
@@ -51,7 +52,7 @@ router.post("/send-email-form-home", async (req, res) => {
             //para esto, usar variables de entorno 
             auth: {
                 user:'administracion@inmobiliarianewman.com',
-                pass: '//Newman2021'
+                pass: '//Newman2121'
             },
             tls: {
                 rejectUnauthorized: false //indico que el mail puede enviarse de cualquier servidor, sino no podria mandarlo desde localhost

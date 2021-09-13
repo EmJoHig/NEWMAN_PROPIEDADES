@@ -13,7 +13,8 @@ router.get('/compra-campos', async (req, res) => {
 router.get('/detalle-campo/:_id', async (req, res) => {
     const campo =  await Campo.findById(req.params._id).lean();
 
-    campo.imagen = "data:image/jpg;base64," + campo.imagen;
+    // campo.imagen = "data:image/jpg;base64," + campo.imagen;
+    // console.log(campo.imagen[3]);
     res.render('detalle-campo', { campo });
 });
 
@@ -64,7 +65,7 @@ router.post("/send-email-campo/:_id", async (req, res) => {
             //para esto, usar variables de entorno 
             auth: {
                 user:'administracion@inmobiliarianewman.com',
-                pass: '//Newman2021'
+                pass: '//Newman2121'
             }, 
             tls: {
                 rejectUnauthorized: false //indo que el mail puede enviarse de cualquier servidor, sino no podria mandarlo desde localhost

@@ -4,13 +4,18 @@ const exphbs = require('express-handlebars');
 const methodOverride = require('method-override');
 const session = require('express-session');
 const flash = require('connect-flash');
+const MongoStore = require('connect-mongo');
+const config = require("./config");
 
 //inicializadores
 var app = express();
 require('./database');
 
 // Settings 
-app.set('port', process.env.PORT || 3000)
+app.set('port', config.PORT);
+
+app.listen(app.get("port"));
+
 app.set('views', path.join(__dirname, 'views'));// le defino a node donde esta la carpeta views
 app.engine('.hbs', exphbs({
     defaultLayout: 'main',
@@ -28,7 +33,8 @@ app.use(methodOverride('_method')); // para qeu los formularios envien ademas de
 app.use(session({ //almaceno los datos del usuario ocultandolos temporalmnemte
     secret: 'exodia',
     resave: true,
-    saveUninitialized: true
+    saveUninitialized: true,
+    store: MongoStore.create({ mongoUrl: config.MONGODB_URI }),
 }));
 
 app.use(flash());
@@ -55,9 +61,12 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 
 //Server is Listeninig 
-var port = process.env.PORT || 3000;
-app.listen(port);
-console.log(port);
+// var port = process.env.PORT || 3000;
+// app.listen(port);
+console.log(process.env.PORT);
+
+
+
 // app.listen(app.get('´port'), () => {
 //     console.log('Server on Port', app.get('´port'));
 // })

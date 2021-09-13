@@ -1782,30 +1782,35 @@ p.form-message.success, p.form-message.error {
 
 /* SLIDER */
 .carousel-inner .carousel-item img{
-  max-height: 400px;
+  max-height: 500px;
   background-position: center center;
   background-size: cover;
   border-radius: 25px;
 }
 @media (max-width: 767px) {
   .carousel-inner .carousel-item img {
-    max-height: 200px; } }
+    max-height: 250px; } }
 
 
 @media (max-width: 767px) {
   .contact-area {
     padding-top: 150px;} }
 
-/* FIN  SLIDER */
+
 
     
 .slider-responsive{
-  width: 60%;
+  width: 80%;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 @media (max-width: 767px) {
   .slider-responsive{
     width: 100%;}}
+
+
+/* FIN  SLIDER */
 
 /* VIDEO */
 @media (max-width: 767px) {

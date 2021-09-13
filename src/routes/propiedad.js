@@ -11,6 +11,8 @@ const bodyParser = require('body-parser');
 const mime = require('mime');
 //mail
 const nodemailer = require('nodemailer'); 
+//handlebars
+const Handlebars = require('handlebars')
 
 const storageMulter = multer.diskStorage({
     destination: path.join(__dirname, '../public/uploads') ,
@@ -26,11 +28,11 @@ app.use(express.json());
 //creo las rutas del servidor
 
 //DESCOMENTAR CUANDO HAYA PROPIEDADES EN ALQUILER
-// router.get('/alquiler', async (req, res) => {
-//     var ObjectId = require('mongodb').ObjectID;
-//     const propiedades = await Propiedad.find({ estadopropiedad: ObjectId("60e9bbd5703ed80630487ab2")}).lean();
-//     res.render('alquiler', { propiedades });
-// });
+router.get('/alquiler', async (req, res) => {
+    var ObjectId = require('mongodb').ObjectID;
+    const propiedades = await Propiedad.find({ estadopropiedad: ObjectId("60e9bbd5703ed80630487ab2")}).lean();
+    res.render('alquiler', { propiedades });
+});
 
 router.get('/compra', async (req, res) => {
     var ObjectId = require('mongodb').ObjectID;
@@ -44,8 +46,7 @@ router.get('/compra', async (req, res) => {
 router.get('/detalle/:_id', async (req, res) => {
     const propiedad =  await Propiedad.findById(req.params._id).lean();
 
-    propiedad.imagen = "data:image/jpg;base64," + propiedad.imagen;
-    // console.log(propiedad.video.length);
+    // propiedad.imagen = "data:image/jpg;base64," + propiedad.imagen;
     res.render('detalle', { propiedad });
 });
 
@@ -59,9 +60,10 @@ router.get('/nueva', (req, res) => {
 //debo definir donde voy a colocar la imagen que subo
 const uploadimage = multer({
     storage: storageMulter,
+    // limits: { fileSize: 17825796 },
     dest: path.join(__dirname, '..public/uploads'),
     fileFilter: (req, file, cb) => {//file es el objeto que tinene todos los datos de la imagen como mimetype: image/png 
-        const filetypes = /jpeg|png|jpg|gif/;
+        const filetypes = /jpeg|png|jpg|gif|mp4/;
         const mimetype = filetypes.test(file.mimetype);//compruebo que el valor de file.mimetype coincida con los que tiene la var filetypes
         const extname = filetypes.test(path.extname(file.originalname));//con path.extname obtengo la extencion que tiene el valor file.originalname
 
@@ -70,35 +72,63 @@ const uploadimage = multer({
         }
         cb("Error: El archivo debe tener una imagen válida.");
     }
-}).single('image'); //image porque es el mismo nombre que tiene el input en su propiedad name del form de alta
+}).array('imagenes'); //image porque es el mismo nombre que tiene el input en su propiedad name del form de alta
 
 
 
 
 router.post("/propiedad/nueva", uploadimage, async (req, res) => {
 
-    const {nombre, direccion, precio, descripcion, tipopropiedad, banos, dormitorios, superficie, cocheras} = req.body;
-    var fs = require('fs');
-    //convierto la imagen en base 64
-    let binaryData = fs.readFileSync(req.file.path);
-    var base64String = new Buffer.from(binaryData).toString("base64");
+    const {nombre, direccion, moneda, precio, descripcion, tipopropiedad, banos, dormitorios, superficie, cocheras} = req.body;
+    if (nombre != '' && direccion != '' && moneda != '' && precio != '' &&  descripcion != '' && tipopropiedad != ''){
 
-    let estadoPropiedad = await EstadoPropiedad.findOne({ codigo: 'V' }).lean();
-    
-    if (tipopropiedad == 'P'){
+        var fs = require('fs');
+        // convierto la imagen en base 64
+        // let binaryData = fs.readFileSync(req.file.path);
+        // var base64String = new Buffer.from(binaryData).toString("base64");
 
-        const nuevaPropiedad = new Propiedad({ nombre, direccion, precio, descripcion, tipopropiedad, banos, dormitorios, superficie, cocheras });
-        nuevaPropiedad.estadopropiedad = estadoPropiedad._id;
-        nuevaPropiedad.imagen = base64String;
-        await nuevaPropiedad.save();
+        let estadoPropiedad = await EstadoPropiedad.findOne({ codigo: 'V' }).lean();
+        
+        // console.log('req.body');
+        const imagenes = [];
+        const videos = [];
+        req.files.forEach(element => {
+            let binaryData = fs.readFileSync(element.path);
+            var base64String = new Buffer.from(binaryData).toString("base64");
+
+            if (path.extname(element.originalname) == '.mp4'){
+                // console.log('es video');
+                videos.push(base64String);
+            } else{
+                // console.log('no es video');
+                imagenes.push(base64String);
+            }
+        });
+        if (tipopropiedad == 'P' || tipopropiedad == 'p'){
+            const nuevaPropiedad = new Propiedad({ nombre, direccion, moneda, precio, descripcion, tipopropiedad, banos, dormitorios, superficie, cocheras });
+            nuevaPropiedad.estadopropiedad = estadoPropiedad._id;
+            nuevaPropiedad.imagenes = imagenes;
+            if (videos.length > 0 && videos.length == 1){
+                nuevaPropiedad.video = videos;
+            }
+            await nuevaPropiedad.save();
+        } else if (tipopropiedad == 'C' || tipopropiedad == 'c') {
+            const nuevaPropiedad = new Campo({ nombre, direccion, moneda, precio, descripcion, tipopropiedad });
+            nuevaPropiedad.estadopropiedad = estadoPropiedad._id;
+
+            if (imagenes.length > 0){
+                nuevaPropiedad.imagen = imagenes;
+            } 
+
+            if (videos.length > 0 && videos.length == 1){
+                nuevaPropiedad.video = videos;
+            }
+            await nuevaPropiedad.save();
+        }
     }else{
-        const nuevaPropiedad = new Campo({ nombre, direccion, precio, descripcion, tipopropiedad });
-        nuevaPropiedad.estadopropiedad = estadoPropiedad._id;
-        nuevaPropiedad.imagen = base64String;
-        await nuevaPropiedad.save();
+        console.log('CAMPOS INCOMPLETOS');
     }
     
-
     res.redirect("/nueva");  
 });
 
@@ -143,26 +173,25 @@ router.post("/send-email-propiedad/:_id", async (req, res) => {
         `;
 
         const transporter = nodemailer.createTransport({
-            host:'smtp.hostinger.com',
-            port:465,
+            host: 'smtp.hostinger.com',
+            port: 465,
             secure: true,
             //para esto, usar variables de entorno 
             auth: {
                 user:'administracion@inmobiliarianewman.com',
-                pass: '//Newman2021'
+                pass: '//Newman2121'
             },
             tls: {
                 rejectUnauthorized: false //indo que el mail puede enviarse de cualquier servidor, sino no podria mandarlo desde localhost
             }
         });
-
+        
         const info = await transporter.sendMail({
             from: "'Newman Group' <administracion@inmobiliarianewman.com>",
             to: 'newmaninmobiliaria@gmail.com',
             subject: 'CONSULTA PROPIEDAD',
             html: contentHTML
         });
-
         // seteo el mensaje de success
         req.flash('success_msg', 'El mail ha sido enviado!');
         
@@ -212,7 +241,7 @@ router.post("/send-email-contact", async (req, res) => {
             //para esto, usar variables de entorno 
             auth: {
                 user:'administracion@inmobiliarianewman.com',
-                pass: '//Newman2021'
+                pass: '//Newman2121'
             },
             tls: {
                 rejectUnauthorized: false //indo que el mail puede enviarse de cualquier servidor, sino no podria mandarlo desde localhost
@@ -239,7 +268,13 @@ router.get('/contacto', (req, res) => {
     res.render("contacto");
 });
 
-
+//HELPER DE HANDLEBARS PARA USAR LOS EQUALS EN LOS IF, VER EJEMPLO EN DETALLE PROPIEDAD
+Handlebars.registerHelper('eq', function () {
+    const args = Array.prototype.slice.call(arguments, 0, -1);
+    return args.every(function (expression) {
+        return args[0] === expression;
+    });
+});
 
 
 module.exports = router;

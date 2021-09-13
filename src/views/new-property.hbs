@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
@@ -9,7 +9,7 @@
     <title>Unfold - Personal Portfolio & CV Template</title>
 
     <!--====== Favicon Icon ======-->
-    <link rel="shortcut icon" href="/images/favicon.png" type="image/png">
+    {{!-- <link rel="shortcut icon" href="/images/favicon.png" type="image/png"> --}}
 
     <!--====== Bootstrap css ======-->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -38,7 +38,7 @@
                     <div class="col-lg-12">
                         <nav class="navbar navbar-expand-lg">
                             <a class="navbar-brand" href="/index.html">
-                                <img src="/images/logo.png" alt="Logo">
+                                {{!-- <img src="/images/logo.png" alt="Logo"> --}}
                             </a> <!-- Logo -->
                             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                                 <span class="toggler-icon"></span>
@@ -48,9 +48,8 @@
                             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                                 <ul class="navbar-nav ml-auto">
                                     <li class="nav-item"><a class="page-scroll" href="/">INICIO</a></li>
-                                    <li class="nav-item"><a class="page-scroll" href="/alquiler">ALQUILER</a></li>
+                                    <li class="nav-item"><a class="page-scroll" href="/compra-campos">CAMPOS</a></li>
                                     <li class="nav-item"><a class="page-scroll" href="/compra">COMPRA</a></li>
-                                    <li class="nav-item"><a class="page-scroll" href="/contacto">CONTACTO</a></li>
                                 </ul>
                             </div> <!-- navbar collapse -->
                         </nav> <!-- navbar -->
@@ -60,7 +59,7 @@
         </div> <!-- navigation -->
     </header>
 
-    <section class="contact-area pt-200 pb-50 gray-bg">
+    <section class="contact-area pt-80 pb-5 gray-bg">
         <div class="container">
            <div class="col-md-8 mx-auto">
                 <div class="card text-center">
@@ -75,6 +74,11 @@
                             <div class="form-group">
                                 <input type="text" name="direccion" class="form-control" placeholder="Direccion" autofocus/>
                             </div>
+
+                            <div class="form-group">
+                                <input type="text" name="moneda" class="form-control" placeholder="MONEDA" />
+                            </div>
+
                             <div class="form-group">
                                 <input type="text" name="precio" class="form-control" placeholder="Precio" autofocus/>
                             </div>
@@ -103,9 +107,16 @@
                                 <input type="number" name="cocheras" class="form-control" placeholder="COCHERAS" />
                             </div>
 
-                            <!-- IMAGENES -->
-                            <div class="form-group">
+                            <!-- IMAGEN PRINCIPAL -->
+                            {{!-- <div class="form-group">
+                                <label> IMAGEN PRINCIPAL</label>
                                 <input type="file" name="image" class="form-control" placeholder="" autofocus/>
+                            </div> --}}
+
+                            <!-- IMAGENES SECUNDARIAS-->
+                            <div class="form-group">
+                                <label> IMAGENES</label>
+                                <input type="file" name="imagenes" class="form-control" placeholder="" autofocus multiple/>
                             </div>
 
 
@@ -124,19 +135,7 @@
         </div> 
     </section>
 
-    <footer id="footer" class="footer-area">
-        <div class="footer-copyright pb-20">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="copyright-text text-center pt-20">
-                            <p>Copyright © 2022. Template Crafted by <a href="https://uideck.com" rel="nofollow">UIdeck</a></p>
-                        </div> <!-- copyright text -->
-                    </div>
-                </div> <!-- row -->
-            </div> <!-- container -->
-        </div> <!-- footer widget -->
-    </footer>
+    
 
 
     <!--====== jquery js ======-->
